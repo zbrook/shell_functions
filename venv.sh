@@ -1,14 +1,24 @@
 # simple wrapper for virtualenv for minds with simpler tastes than pipenv.
-# If doesn't exist, create 'venv'. If exists but not sourced, activate. If active, deactivate.
+# If doesn't exist, create virtual env with argument name (default "venv"). 
+# If exists but not sourced, activate. If active, deactivate.
 venv () {
+    let virtualEnvName
+    virtualEnvName="venv"
+    if [[ $1 != "" ]]
+    then
+        virtualEnvName=$1
+    else
+        virtualEnvName="venv"
+    fi
+    
     if [[ "$VIRTUAL_ENV" != "" ]]
     then
-            deactivate
-    elif [[ -d "venv" ]]
+        deactivate
+    elif [[ -d $virtualEnvName ]]
     then
-        source venv/bin/activate
+        source $virtualEnvName/bin/activate
     else
-        virtualenv venv
-        source venv/bin/activate
+        python -m venv $virtualEnvName
+        source $virtualEnvName/bin/activate
     fi
 }
